@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Markov</name>
+    </assembly>
+    <members>
+        <member name="T:Markov.ChainState`1">
+            <summary>
+            Represents a state in a Markov chain.
+            </summary>
+            <typeparam name="T">The type of the constituent parts of each state in the Markov chain.</typeparam>
+        </member>
+        <member name="M:Markov.ChainState`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Markov.ChainState`1"/> class with the specified items.
+            </summary>
+            <param name="items">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of items to be copied as a single state.</param>
+        </member>
+        <member name="M:Markov.ChainState`1.#ctor(`0[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Markov.ChainState`1"/> class with the specified items.
+            </summary>
+            <param name="items">An array of <typeparamref name="T"/> items to be copied as a single state.</param>
+        </member>
+        <member name="P:Markov.ChainState`1.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:Markov.ChainState`1.IsReadOnly">
+            <inheritdoc />
+        </member>
+        <member name="P:Markov.ChainState`1.Item(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.op_Inequality(Markov.ChainState{`0},Markov.ChainState{`0})">
+            <summary>
+            Determines whether two specified instances of <see cref="T:Markov.ChainState`1"/> are not equal.
+            </summary>
+            <param name="a">The first <see cref="T:Markov.ChainState`1"/> to compare.</param>
+            <param name="b">The second <see cref="T:Markov.ChainState`1"/> to compare.</param>
+            <returns>true if <paramref name="a"/> and <paramref name="b"/> do not represent the same state; otherwise, false.</returns>
+        </member>
+        <member name="M:Markov.ChainState`1.op_Equality(Markov.ChainState{`0},Markov.ChainState{`0})">
+            <summary>
+            Determines whether two specified instances of <see cref="T:Markov.ChainState`1"/> are equal.
+            </summary>
+            <param name="a">The first <see cref="T:Markov.ChainState`1"/> to compare.</param>
+            <param name="b">The second <see cref="T:Markov.ChainState`1"/> to compare.</param>
+            <returns>true if <paramref name="a"/> and <paramref name="b"/> represent the same state; otherwise, false.</returns>
+        </member>
+        <member name="M:Markov.ChainState`1.Add(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Clear">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Contains(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.CopyTo(`0[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Equals(Markov.ChainState{`0})">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:Markov.ChainState`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.IndexOf(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Insert(System.Int32,`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.Remove(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Markov.ChainState`1.RemoveAt(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:Markov.MarkovChain`1">
+            <summary>
+            Builds and walks interconnected states based on a weighted probability.
+            </summary>
+            <typeparam name="T">The type of the constituent parts of each state in the Markov chain.</typeparam>
+        </member>
+        <member name="M:Markov.MarkovChain`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Markov.MarkovChain`1"/> class.
+            </summary>
+            <param name="order">Indicates the desired order of the <see cref="T:Markov.MarkovChain`1"/>.</param>
+            <remarks>
+            <para>The <paramref name="order"/> of a generator indicates the depth of its internal state.  A generator
+            with an order of 1 will choose items based on the previous item, a generator with an order of 2
+            will choose items based on the previous 2 items, and so on.</para>
+            <para>Zero is not classically a valid order value, but it is allowed here.  Choosing a zero value has the
+            effect that every state is equivalent to the starting state, and so items will be chosen based on their
+            total frequency.</para>
+            </remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Adds the items to the generator with a weight of one.
+            </summary>
+            <param name="items">The items to add to the generator.</param>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(System.Collections.Generic.IEnumerable{`0},System.Int32)">
+            <summary>
+            Adds the items to the generator with the weight specified.
+            </summary>
+            <param name="items">The items to add to the generator.</param>
+            <param name="weight">The weight at which to add the items.</param>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(System.Collections.Generic.IEnumerable{`0},`0)">
+            <summary>
+            Adds the item to the generator, with the specified items preceding it.
+            </summary>
+            <param name="previous">The items preceding the item.</param>
+            <param name="item">The item to add.</param>
+            <remarks>
+            See <see cref="M:Markov.MarkovChain`1.Add(System.Collections.Generic.IEnumerable{`0},`0,System.Int32)"/> for remarks.
+            </remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(Markov.ChainState{`0},`0)">
+            <summary>
+            Adds the item to the generator, with the specified state preceding it.
+            </summary>
+            <param name="state">The state preceding the item.</param>
+            <param name="next">The item to add.</param>
+            <remarks>
+            See <see cref="M:Markov.MarkovChain`1.Add(Markov.ChainState{`0},`0,System.Int32)"/> for remarks.
+            </remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(System.Collections.Generic.IEnumerable{`0},`0,System.Int32)">
+            <summary>
+            Adds the item to the generator, with the specified items preceding it and the specified weight.
+            </summary>
+            <param name="previous">The items preceding the item.</param>
+            <param name="item">The item to add.</param>
+            <param name="weight">The weight of the item to add.</param>
+            <remarks>
+            This method does not add all of the preceding states to the generator.
+            Notably, the empty state is not added, unless the <paramref name="previous"/> parameter is empty.
+            </remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Add(Markov.ChainState{`0},`0,System.Int32)">
+             <summary>
+             Adds the item to the generator, with the specified state preceding it and the specified weight.
+             </summary>
+             <param name="state">The state preceding the item.</param>
+             <param name="next">The item to add.</param>
+             <param name="weight">The weight of the item to add.</param>
+             <remarks>
+             This adds the state as-is.  The state may not be reachable if, for example, the
+             number of items in the state is greater than the order of the generator, or if the
+             combination of items is not available in the other states of the generator.
+            
+             A negative weight may be passed, which will have the impact of reducing the weight
+             of the specified state transition.  This can therefore be used to remove items from
+             the generator. The resulting weight will never be allowed below zero.
+             </remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+            <remarks>Assumes an empty starting state.</remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <param name="previous">The items preceding the first item in the chain.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain(System.Int32)">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <param name="seed">The seed for the random number generator, used as the random number source for the chain.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+            <remarks>Assumes an empty starting state.</remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain(System.Collections.Generic.IEnumerable{`0},System.Int32)">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <param name="previous">The items preceding the first item in the chain.</param>
+            <param name="seed">The seed for the random number generator, used as the random number source for the chain.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain(System.Random)">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <param name="rand">The random number source for the chain.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+            <remarks>Assumes an empty starting state.</remarks>
+        </member>
+        <member name="M:Markov.MarkovChain`1.Chain(System.Collections.Generic.IEnumerable{`0},System.Random)">
+            <summary>
+            Randomly walks the chain.
+            </summary>
+            <param name="previous">The items preceding the first item in the chain.</param>
+            <param name="rand">The random number source for the chain.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of the items chosen.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetInitialStates">
+            <summary>
+            Gets the items from the generator that follow from an empty state.
+            </summary>
+            <returns>A dictionary of the items and their weight.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetNextStates(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Gets the items from the generator that follow from the specified items preceding it.
+            </summary>
+            <param name="previous">The items preceding the items of interest.</param>
+            <returns>A dictionary of the items and their weight.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetNextStates(Markov.ChainState{`0})">
+            <summary>
+            Gets the items from the generator that follow from the specified state preceding it.
+            </summary>
+            <param name="state">The state preceding the items of interest.</param>
+            <returns>A dictionary of the items and their weight.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetStates">
+            <summary>
+            Gets all of the states that exist in the generator.
+            </summary>
+            <returns>An enumerable collection of <see cref="T:Markov.ChainState`1"/> containing all of the states in the generator.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetTerminalWeight(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Gets the weight of termination following from the specified items.
+            </summary>
+            <param name="previous">The items preceding the items of interest.</param>
+            <returns>A dictionary of the items and their weight.</returns>
+        </member>
+        <member name="M:Markov.MarkovChain`1.GetTerminalWeight(Markov.ChainState{`0})">
+            <summary>
+            Gets the weights of termination following from the specified state.
+            </summary>
+            <param name="state">The state preceding the items of interest.</param>
+            <returns>A dictionary of the items and their weight.</returns>
+        </member>
+    </members>
+</doc>
