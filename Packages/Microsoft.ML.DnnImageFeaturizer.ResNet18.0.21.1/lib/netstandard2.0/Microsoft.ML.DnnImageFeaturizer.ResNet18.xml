@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.ML.DnnImageFeaturizer.ResNet18</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.ML.ResNet18Extension">
+            <summary>
+            This is an extension method to be used with the <see cref="T:Microsoft.ML.Transforms.Onnx.DnnImageFeaturizerEstimator"/> in order to use a pretrained ResNet18 model.
+            The NuGet containing this extension is also guaranteed to include the binary model file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ML.ResNet18Extension.ResNet18(Microsoft.ML.Transforms.Onnx.DnnImageModelSelector,Microsoft.ML.Runtime.IHostEnvironment,System.String,System.String)">
+            <summary>
+            Returns an estimator chain with the two corresponding models (a preprocessing one and a main one) required for the ResNet pipeline.
+            Also includes the renaming ColumnsCopyingTransforms required to be able to use arbitrary input and output column names.
+            This assumes both of the models are in the same location as the file containing this method, which they will be if used through the NuGet.
+            This should be the default way to use ResNet18 if importing the model from a NuGet.
+            </summary>
+        </member>
+        <member name="M:Microsoft.ML.ResNet18Extension.ResNet18(Microsoft.ML.Transforms.Onnx.DnnImageModelSelector,Microsoft.ML.Runtime.IHostEnvironment,System.String,System.String,System.String)">
+            <summary>
+            This allows a custom model location to be specified. This is useful is a custom model is specified,
+            or if the model is desired to be placed or shipped separately in a different folder from the main application. Note that because ONNX models
+            must be in a directory all by themselves for the OnnxTransformer to work, this method appends a ResNet18Onnx/ResNetPrepOnnx subdirectory
+            to the passed in directory to prevent having to make that directory manually each time.
+            </summary>
+        </member>
+    </members>
+</doc>
