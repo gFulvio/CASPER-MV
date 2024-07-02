@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PercolatorMatching</name>
+    </assembly>
+    <members>
+        <member name="T:Percolator.Matching.ThresholdPercentage">
+            <summary>
+            Thresholds for similarity passes for the "IsSimilar" function.
+            </summary>
+        </member>
+        <member name="T:Percolator.Matching.Fuzzylator">
+            <summary>
+            Percolator class for fuzzy string matching and scoring based on the Ratcliff/Obershelp algorithm.
+            </summary>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.#ctor">
+            <summary>
+            Empty paramater constructor sets the general threshold at 0.
+            </summary>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.#ctor(Percolator.Matching.ThresholdPercentage)">
+            <summary>
+            Sets the general threshold for matching.
+            </summary>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsSimilar(System.String,System.String,System.Boolean)">
+            <summary>
+            Takes the source and target and compares them, returning a true if the similarity meets or exceeds the minimum threshold.
+            </summary>
+            <param name="source">The string to match.</param>
+            <param name="target">The string to match against the source string.</param>
+            <param name="ignoreCase">"True" ignores case.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsSimilar(System.String,System.String,System.Double@,System.Boolean)">
+            <summary>
+            Takes the source and target and compares them, returning a true if the similarity meets or exceeds the minimum threshold.
+            </summary>
+            <param name="source">The string to match.</param>
+            <param name="target">The string to match against the source string.</param>
+            <param name="score">Optional output parameter that outputs the score of the match if the match meets the threshold.</param>
+            <param name="ignoreCase">"True" ignores case.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsSimilar(System.String,System.String,Percolator.Matching.ThresholdPercentage,System.Boolean)">
+            <summary>
+            Overloaded version which takes a specific alternate threshold.
+            </summary>
+            <param name="source">The string to match.</param>
+            <param name="target">The string to match against the source string.</param>
+            <param name="ignoreCase">"True" ignores case.</param>
+            <param name="alternateThreshold">The temporary threshold for this function.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsSimilar(System.String,System.String,System.Double@,Percolator.Matching.ThresholdPercentage,System.Boolean)">
+            <summary>
+            Overloaded version which takes a specific alternate threshold.
+            </summary>
+            <param name="source">The string to match.</param>
+            <param name="target">The string to match against the source string.</param>
+            <param name="score">Optional output parameter that outputs the score of the match if the match meets the threshold.</param>
+            <param name="ignoreCase">"True" ignores case.</param>
+            <param name="alternateThreshold">The temporary threshold for this function.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsUpcSimilar(System.String,System.String)">
+            <summary>
+            Similarity specifically for UPCs.
+            </summary>
+            <param name="upcSource">UPC string to match.</param>
+            <param name="upcTarget">UPC string to match against the source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsUpcSimilar(System.String,System.String,System.Double@)">
+            <summary>
+            Similarity specifically for UPCs.
+            </summary>
+            <param name="upcSource">UPC string to match.</param>
+            <param name="upcTarget">UPC string to match against the source.</param>
+            <param name="score">Optional output parameter that outputs the score of the match if the match meets the threshold.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsUpcSimilar(System.String,System.String,Percolator.Matching.ThresholdPercentage)">
+            <summary>
+            Overloaded verion of IsUpcSimilar to include a temporary alternate threshold specific to this comparison.
+            </summary>
+            <param name="upcSource">UPC string to match.</param>
+            <param name="upcTarget">UPC string to match against the source.</param>
+            <param name="alternateThreshold">The alternate threshold put in place for this specific comparision.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.IsUpcSimilar(System.String,System.String,System.Double@,Percolator.Matching.ThresholdPercentage)">
+            <summary>
+            Overloaded verion of IsUpcSimilar to include a temporary alternate threshold specific to this comparison.
+            </summary>
+            <param name="upcSource">UPC string to match.</param>
+            <param name="upcTarget">UPC string to match against the source.</param>
+            <param name="score">Optional output parameter to output the score if they do match.</param>
+            <param name="alternateThreshold">The alternate threshold put in place for this specific comparision.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.GetUpcScore(System.String,System.String)">
+            <summary>
+            Sepcific scoring for UPCs without longest common subtring. 
+            </summary>
+            <param name="upcSource">The string to match.</param>
+            <param name="upcTarget">The string to match against the source string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Percolator.Matching.Fuzzylator.GetScore(System.String,System.String,System.Boolean)">
+            <summary>
+            Used for scoring two strings on the similarity using Ratcliff/Obershelp algorithm.
+            </summary>
+            <param name="source">String to match.</param>
+            <param name="target">String to match against the source.</param>
+            <param name="ignoreCase">True to ignore case.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Percolator.Matching.Fuzzylator.Threshold">
+            <summary>
+            Minimum threshold set for similarity passing.
+            </summary>
+        </member>
+    </members>
+</doc>
