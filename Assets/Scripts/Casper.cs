@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Casper : MonoBehaviour
 {
-    
-    
-    
-    
-
     // Variabili per il rilevamento
     [SerializeField] private Transform user;  // Riferimento al transform dell'utente
 
@@ -48,7 +43,7 @@ public class Casper : MonoBehaviour
         currentWorldState = new WorldState(user.position, user.position, "", new Vector3());
         detectedObjectsInfo = new List<DetectedObjectInfo>();
 
-        observations = new List<string> { "Pick and Place", "Sip" };
+        //observations = new List<string> { "Pick and Place Meal", "Cook" };
     }
 
 	private void Update()
@@ -77,8 +72,11 @@ public class Casper : MonoBehaviour
         lowLevel.ActionPredictor();
         predictedAction.text = lowLevel.predictedAction;
 
-        //highLevel.GoalR(lowLevel.observedActions);
-        highLevel.GoalR(observations);
+        if(lowLevel.observedActions.Count > 0 )
+        {
+            highLevel.GoalR(lowLevel.observedActions);
+        }
+        //highLevel.GoalR(observations);
         predictedGoal.text = highLevel.predictedGoal;
 
         /*if(predictedGoal != null)

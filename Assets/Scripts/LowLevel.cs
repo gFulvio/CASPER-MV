@@ -289,6 +289,10 @@ public class LowLevel : MonoBehaviour
                         predictedAction = Contextualizer(action);
 
                     }
+                    else if (action.name == "Pick and Place")
+                    {
+                        predictedAction = action.name + " " + target ;
+                    }
                     else
                     {
                         predictedAction = action.name;
@@ -298,6 +302,10 @@ public class LowLevel : MonoBehaviour
                     if(observedActions.Count == 0 || predictedAction != observedActions[observedActions.Count - 1])
                     {
                         observedActions.Add(predictedAction);
+                        if (observedActions.Contains("Relocate"))
+                        {
+                            observedActions.Remove("Relocate");
+                        } 
                     }
                 }   
 			}
@@ -312,9 +320,11 @@ public class LowLevel : MonoBehaviour
                return "Wash";
 			case "Microwave":
                 return "Cook";
-			case "Plate":
+			case "Meal":
                 return "Eat";
-			case "Glass":
+            case "Bisquits":
+                return "Eat";
+            case "Glass":
                 return "Sip";
             default:
                 return action.name;

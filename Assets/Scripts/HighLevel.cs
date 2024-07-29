@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Azure;
+﻿using Microsoft.Extensions.Azure;
 using PlanningAi.Planning;
 using PlanningAi.Planning.Actions;
 using PlanningAi.Planning.Planners;
 using PlanningAi.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -101,99 +102,107 @@ public class HighLevel : MonoBehaviour
 
 	public void GoalR(List<string> sigma)
 	{
-		Debug.Log("Start Reasoning.");
-        // Initialize P with the unmarked plans T in L
-        Dictionary<string, List<string>> P = new Dictionary<string, List<string>>(goalLibrary);
+		// Initialize P with the unmarked plans T in L
+		Dictionary<string, List<string>> P = new Dictionary<string, List<string>>(goalLibrary);
 
-        List<string> Pkeys = P.Keys.ToList();
-        Debug.Log("PKeys count: " + Pkeys.Count);
+		foreach (string s in sigma)
+		{
+			Debug.Log("Observation list: ("+string.Join(", ", sigma)+")");
+			Debug.Log($"- Processing observation: {s}");
 
-		float scoresSum = 0;
+			// Initialize P′ to empty
+			Dictionary<string, List<string>> Pprimo = new Dictionary<string, List<string>>();
 
-        // Verifica il contenuto di P
-        foreach (var entry in P)
-        {
-            Debug.Log("Initial P - Key: " + entry.Key + ", Value: " + string.Join(", ", entry.Value));
-        }
-
-        Debug.Log("Observations: " + sigma.Count + " with elements: " + string.Join(", ", sigma));
-        // foreach s in sigma
-        foreach (string s in sigma)
-        {
-            Debug.Log("Processing sigma element: " + s);
-
-            // Initialize P' to empty
-            Dictionary<string, List<string>> Pprimo = new Dictionary<string, List<string>>();
-
-			// while P is not empty pop p from P
-            foreach (string key in Pkeys)
+			// while P is not empty do
+			while (P.Count > 0)
 			{
-                
-                List<string> p = P[key];
-                Debug.Log("Processing plan: " + key + " with elements: " + string.Join(", ", p));
+				// Pop p from P
+				var plan = P.First();
+				List<string> p = plan.Value;
+				P.Remove(plan.Key);
+				Debug.Log($"-- Processing plan: {plan.Key}");
 
-                // foreach unobserved node n in p named s
-                if (p.Exists(n => n == s))
+				if (!p.Contains(s))
 				{
-					Debug.Log("Match found");
-                    // Generate a copy p' of p
-                    List<string> pPrimo = new List<string>(p);
+					Debug.Log($"--- No match for plan {plan.Key}");
+				}
 
-                    // Mark n as observed in p'
-                    for (int n = 0; n < p.Count; n++)
+				// foreach unobserved node n in p named σi do
+				for (int n = 0; n < p.Count; n++)
+				{
+					if (p[n] == s)
 					{
-						if (p[n] == s)
+						Debug.Log($"--- Match found at position {n + 1}");
+						Debug.Log($"---- ({string.Join(", ", plan.Value)})");
+						// Generate a copy p′ of p
+						List<string> pPrimo = new List<string>(p);
+						pPrimo[n] = "observed";
+
+						// if there are any unobserved nodes on the left of n in p′
+						if (n != 0)
 						{
-							pPrimo[n] = "observed";
+							for (int n1 = 0; n1 < n; n1++)
+							{
+								// Mark them as missed
+								if (pPrimo[n1] != "observed")
+								{
+									pPrimo[n1] = "missed";
+								}
+							}
 						}
+						// Insert p′ in P′
+						Pprimo.Add(plan.Key + "(with " + s + " at position " + (n + 1) + ")", pPrimo);
 					}
-
-                    // Insert p' in P'
-                    Pprimo.Add(key, pPrimo);
-                }
-            }
-
-            // Insert P' in P
-            foreach (string key in Pprimo.Keys)
-			{
-				P[key] = Pprimo[key];
+				}
 			}
-        }
-
-		// Claculate the score for each plan
-		Dictionary<string, float> scores = new Dictionary<string, float>();
-		foreach(var p in P)
-		{
-			float score = 0;
-			List<string> observed = p.Value.FindAll(n => n == "observed");
-			List<string> missed = new List<string>();
-			if(observed.Count > 0)
+			Debug.Log($"- Explanations for action {s}: {Pprimo.Count}");
+			Debug.Log("");
+			// Insert P′ in P
+			foreach (var item in Pprimo)
 			{
-                int nIndex = p.Value.FindLastIndex(n => n == "observed");
-                List<string> missing = p.Value.GetRange(0, nIndex);
-				missed = missing.FindAll(m => m != "observed");
-            }
-			score = ((float)observed.Count/((float)p.Value.Count) * (1 - ((float)missed.Count/(float)p.Value.Count)));
-			Debug.Log(p.Value.Count);
-			Debug.Log($"Punteggio per {p.Key} = {(float)observed.Count / (float)p.Value.Count} * (1 - {(float)missed.Count / (float)p.Value.Count}) = {score}");
-			scores.Add(p.Key, score);
+				P.Add(item.Key, item.Value);
+			}
 		}
 
-        scoresSum = scores.Sum(score => score.Value);
-
-		List<string> keys = scores.Keys.ToList();
-		foreach(string key in keys)
+		Debug.Log("");
+		// Calculating score for each plan
+		Debug.Log("Calculating score for each remaining plan (observed * (1 - missed))");
+		Dictionary<string, float> scores = new Dictionary<string, float>();
+		Dictionary<string, float> normalizedScores = new Dictionary<string, float>();
+		foreach (var p in P)
 		{
-			scores[key] /= scoresSum;
+			List<string> observed = p.Value.FindAll(n => n == "observed");
+			List<string> missed = p.Value.FindAll(n => n == "missed");
 
-			Debug.Log(key + ": " + scores[key]);
+			float observed100 = (float)observed.Count / (float)p.Value.Count;
+			float missed100 = (float)missed.Count / (float)p.Value.Count;
+
+			float score = observed100 * (1 - missed100);
+			scores.Add(p.Key, score);
+
+			Debug.Log($"{p.Key} score: {observed100} * (1 - {missed100}) = {score}");
 		}
-
-        // Restituisci il piano con probabilit� maggiore
-        predictedGoal = scores.MaxBy(entry => entry.Value).Key;
-		Debug.Log("Predicted goal: " + predictedGoal);
-
-		Debug.Log("End Reasoning");
+		Debug.Log("");
+		Debug.Log("Normalizing scores");
+		float scoresSum = scores.Values.Sum();
+        Debug.Log($"Scores sum: {scoresSum}");
+        foreach (var item in scores)
+		{
+			float normalizedScore = item.Value / scoresSum;
+			normalizedScores.Add(item.Key, normalizedScore);
+			Debug.Log($"{item.Key} normalized score: {item.Value}/{scoresSum} = {normalizedScore}");
+		}
+		Debug.Log("");
+		if(normalizedScores.Count > 0)
+		{
+            predictedGoal = normalizedScores.MaxBy(entry => entry.Value).Key;
+            Debug.Log($"The predicted goal is: {predictedGoal} at {normalizedScores.MaxBy(entry => entry.Value).Value * 100}%");
+		}
+		else
+		{
+            predictedGoal = "Unpredicted";
+            Debug.Log($"The predicted goal is: {predictedGoal}");
+        }
     }
 }
 
@@ -202,7 +211,7 @@ public class HighLevel : MonoBehaviour
 public class PickAndPlace : DomainActionBase
 {
 	public readonly string _target;
-    public override string ActionName => "Pick and Place";
+    public override string ActionName => $"Pick and Place {_target}";
     public string stringName = "Pick and Place";
 	public PickAndPlace(string target)
 	{
@@ -214,7 +223,7 @@ public class PickAndPlace : DomainActionBase
 public class PrepareMeal : DomainActionBase
 {
     public readonly string _target;
-    public override string ActionName => "Pick and Place";
+    public override string ActionName => $"Pick and Place {_target}";
     public string stringName = "Pick and Place";
 
 	public PrepareMeal(string target)
