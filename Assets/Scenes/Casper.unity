@@ -934,6 +934,7 @@ MonoBehaviour:
   bottle: {fileID: 1549056060}
   glass: {fileID: 1494086665}
   handOrigin: {fileID: 1813623737}
+  lowLevel: {fileID: 888308222}
 --- !u!136 &315245940
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2744,6 +2745,7 @@ MonoBehaviour:
   - Pick
   - Place
   target: 
+  targetScore: 0
   identifiedMovement: 
   observationsNumber: 5
   actionThreshold: 0.8
