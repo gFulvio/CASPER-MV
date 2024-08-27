@@ -25,7 +25,7 @@ public class HighLevel : MonoBehaviour
 		goalStates = new Dictionary<string, DomainState>();
 		goalLibrary = new Dictionary<string, List<string>>();
 
-        // Creazione dello stato iniziale
+        // Creating the initial state
         DomainState currentState = DomainState.Empty
 			.Set("Breakfast", false)
 			.Set("Drink", false)
@@ -34,8 +34,8 @@ public class HighLevel : MonoBehaviour
 			.Set("Warm", false)
 			.Set("PrepareMeal", false);
 
-		// Definizione dei Goal e dei subgoal
-		DomainState breakfastGoal = DomainState.Empty
+        // Definition of Goals and Subgoals
+        DomainState breakfastGoal = DomainState.Empty
 			.Set("Breakfast", true) // Goal
 			.Set("Clean Plate", true); // SubGoal
 
@@ -49,13 +49,13 @@ public class HighLevel : MonoBehaviour
 			.Set("Warm", true) // SubSubGoal
 			.Set("Clean Plate", true); // SubGoal
 
-		// Aggiunta degli stati goal alla lista goalStates
-		goalStates.Add("Breakfast", breakfastGoal);
+        // Adding goal states to the goalStates list
+        goalStates.Add("Breakfast", breakfastGoal);
 		goalStates.Add("Drink", drinkGoal);
 		goalStates.Add("Lunch", lunchGoal);
 
-		// Creazione della lista delle azioni
-		actions = new List<IDomainAction>
+        // Creating the action list
+        actions = new List<IDomainAction>
 		{
 			new PickAndPlace("Plate"),
 			new PickAndPlace("Bottle"),
@@ -71,8 +71,8 @@ public class HighLevel : MonoBehaviour
 			new Wash("Glass")
 		};
 
-		// Creazione dei piani e inserimento nella libreria
-		foreach (var goalState in goalStates)
+        // Creating plans and entering them into the library
+        foreach (var goalState in goalStates)
 		{
 			CreatePlan(currentState, goalState.Key, goalState.Value, actions);
 		}
@@ -80,8 +80,8 @@ public class HighLevel : MonoBehaviour
 
 	public void CreatePlan(DomainState current, string goalName, DomainState goal, List<IDomainAction> actns)
 	{
-		// Crea i goal plans
-		var planner = PlannerFactory.CreatePlanner();
+        // goal plans creation
+        var planner = PlannerFactory.CreatePlanner();
 		var actionSet = new ActionSet(actns);
 		var plan = planner.GetPlan(current, goal, actionSet);
 		List<string> plan2 = new List<string>();
@@ -100,20 +100,21 @@ public class HighLevel : MonoBehaviour
 		}
 	}
 
-	public void GoalR(List<string> sigma)
+	public void GoalReasoner(List<string> sigma)
 	{
-		// Initialize P with the unmarked plans T in L
+		// Initialize P with the unmarked plans in L
 		Dictionary<string, List<string>> P = new Dictionary<string, List<string>>(goalLibrary);
 
-		foreach (string s in sigma)
+        // For every action σi in the observation list σ
+        foreach (string s in sigma)
 		{
 			Debug.Log("Observation list: ("+string.Join(", ", sigma)+")");
 			Debug.Log($"- Processing observation: {s}");
 
 			// Initialize P′ to empty
-			Dictionary<string, List<string>> Pprimo = new Dictionary<string, List<string>>();
+			Dictionary<string, List<string>> P1st = new Dictionary<string, List<string>>();
 
-			// while P is not empty do
+			// while P is not empty
 			while (P.Count > 0)
 			{
 				// Pop p from P
@@ -127,7 +128,7 @@ public class HighLevel : MonoBehaviour
 					Debug.Log($"--- No match for plan {plan.Key}");
 				}
 
-				// foreach unobserved node n in p named σi do
+				// foreach unobserved node n in p named σi
 				for (int n = 0; n < p.Count; n++)
 				{
 					if (p[n] == s)
@@ -135,8 +136,8 @@ public class HighLevel : MonoBehaviour
 						Debug.Log($"--- Match found at position {n + 1}");
 						Debug.Log($"---- ({string.Join(", ", plan.Value)})");
 						// Generate a copy p′ of p
-						List<string> pPrimo = new List<string>(p);
-						pPrimo[n] = "observed";
+						List<string> p1st = new List<string>(p);
+						p1st[n] = "observed";
 
 						// if there are any unobserved nodes on the left of n in p′
 						if (n != 0)
@@ -144,21 +145,21 @@ public class HighLevel : MonoBehaviour
 							for (int n1 = 0; n1 < n; n1++)
 							{
 								// Mark them as missed
-								if (pPrimo[n1] != "observed")
+								if (p1st[n1] != "observed")
 								{
-									pPrimo[n1] = "missed";
+									p1st[n1] = "missed";
 								}
 							}
 						}
 						// Insert p′ in P′
-						Pprimo.Add(plan.Key + "(with " + s + " at position " + (n + 1) + ")", pPrimo);
+						P1st.Add(plan.Key + "(with " + s + " at position " + (n + 1) + ")", p1st);
 					}
 				}
 			}
-			Debug.Log($"- Explanations for action {s}: {Pprimo.Count}");
+			Debug.Log($"- Explanations for action {s}: {P1st.Count}");
 			Debug.Log("");
 			// Insert P′ in P
-			foreach (var item in Pprimo)
+			foreach (var item in P1st)
 			{
 				P.Add(item.Key, item.Value);
 			}

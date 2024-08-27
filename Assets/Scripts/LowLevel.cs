@@ -11,8 +11,8 @@ using Percolator.Matching;
 
 internal class FocusEstimator
 {
-    private float w1 = 0.8f; // Peso arbitrario
-    private float w2 = 0.2f; // Peso arbitrario
+    private float w1 = 0.8f; // Arbitrary weight
+    private float w2 = 0.2f; // Arbitrary weight
 
     public FocusEstimator()
     {
@@ -21,37 +21,37 @@ internal class FocusEstimator
 
     public Dictionary<string, Dictionary<string, float>> QSREncoder(Dictionary<string, Dictionary<string, string>> results)
     {
-        // Creare un nuovo dizionario per i risultati codificati con valori numerici
+        // Create a new dictionary for results coded with numeric values
         Dictionary<string, Dictionary<string, float>> encodedResults = new Dictionary<string, Dictionary<string, float>>();
 
-        // Iterare attraverso gli oggetti nel dizionario da codificare
+        // Iterate through objects in the dictionary to be encoded
         foreach (var objectResult in results)
         {
             string objectName = objectResult.Key;
             Dictionary<string, float> encodedObjectQSRs = new Dictionary<string, float>();
 
-            // Iterare attraverso le QSR per l'oggetto corrente
+            // Iterate through the QSRs for the current object
             foreach (var qsr in objectResult.Value)
             {
                 string qsrType = qsr.Key;
                 string qsrValue = qsr.Value;
 
-                // Mappa il valore QSR a un valore numerico utilizzando la tua logica
+                // Map the QSR value to a numerical value
                 float numericValue = MapQSRToNumericValue(qsrType, qsrValue);
 
-                // Aggiungi il risultato codificato al dizionario
-                if(numericValue != -1.0f)
+                // Add the coded result to the dictionary
+                if (numericValue != -1.0f)
                 {
                     encodedObjectQSRs.Add(qsrType, numericValue);
                 }
                 
             }
 
-            // Aggiungi il risultato dell'oggetto codificato al dizionario principale
+            // Add the result of the coded object to the main dictionary
             encodedResults.Add(objectName, encodedObjectQSRs);
         }
 
-        // Restituisci il dizionario completo con risultati codificati
+        // Return the full dictionary with coded results
         return encodedResults;
     }
 
@@ -84,7 +84,7 @@ internal class FocusEstimator
             }
         }
 
-        // Se non si verifica nessuna corrispondenza, restituisci un valore di default
+        // If no match occurs, return a default value
         return -1.0f;
     }
 
@@ -96,22 +96,22 @@ internal class FocusEstimator
         {
             string objectName = objectResult.Key;
 
-            // Ottieni i valori numerici QDC e QTC dal dizionario codificato
+            // Get QDC and QTC numeric values from the coded dictionary
             float qdcValue = objectResult.Value.ContainsKey("QDC") ? objectResult.Value["QDC"] : 0.0f;
             float qtcValue = objectResult.Value.ContainsKey("QTC") ? objectResult.Value["QTC"] : 0.0f;
 
-            // Ottieni la posizione dell'oggetto
+            // Get the location of the object
             Vector3 objectPosition = objectPositions[objectName];
 
-            // Calcola l'angolo h tra la linea che collega l'utente all'oggetto e l'orientamento dell'utente
+            // Calculates the angle h between the line connecting the user to the object and the user's orientation
             Vector3 objPosOnPlane = new Vector3(objectPosition.x, user.position.y, objectPosition.z); //per avere i vettori alla stezza altezza
             Vector3 direction = Vector3.Normalize(objPosOnPlane - user.position);
             float angleH = Vector3.Angle(user.forward, direction);
 
-            // Calcola il punteggio S(i) utilizzando l'equazione fornita
+            // Calculate the score S(i) using the equation given
             float score = (w1 * qdcValue + w2 * qtcValue) / (1 + angleH);
 
-            // Aggiungi il punteggio al dizionario dei punteggi
+            // Add the score to the score dictionary
             scores[objectName] = score;
         }
 
@@ -199,15 +199,15 @@ public class LowLevel : MonoBehaviour
         CreateChains();
 	}
 
-    // Metodo per ricevere i risultati da Perception
+    // Method for receiving results from Perception
     public void FocusEstimation(Dictionary<string, Dictionary<string, string>> results, Transform user, Dictionary<string, Vector3> objectPositions)
     {
 		perceptionResults = results;
 
-		// Utilizza FocusEstimator per assegnare valori numerici alle QSR
-		Dictionary<string, Dictionary<string, float>> encodedResults = focusEstimator.QSREncoder(results);
+        // Use FocusEstimator to assign numerical values to QSRs
+        Dictionary<string, Dictionary<string, float>> encodedResults = focusEstimator.QSREncoder(results);
 
-        // Calcola i punteggi utilizzando l'equazione fornita
+        // Calculate the scores using the equation provided
         Dictionary<string, float> scores = focusEstimator.CalculateScores(encodedResults, user, objectPositions);
 
         foreach (var element in scores)
@@ -237,7 +237,7 @@ public class LowLevel : MonoBehaviour
 				// Movement prediction
 				identifiedMovement = MovementClassifier.Predict(qsrs).PredictedLabel;
 
-                // Inserimento nella lista delle osservazioni dei movimenti solo se il movimento è diverso da quello immediatamente precedente
+                // Entry in the list of movement observations only if the movement is different from the one immediately preceding it
                 if (identifiedMovement != null)
                 {
 					if (movementObservations.Count == 0 || identifiedMovement != movementObservations[movementObservations.Count - 1])
@@ -298,8 +298,8 @@ public class LowLevel : MonoBehaviour
                         predictedAction = action.name;
                     }
 
-                    // Aggiungi l'azione alla lista di azioni osservate solo se essa è diversa dall'azione precedente.
-                    if(observedActions.Count == 0 || predictedAction != observedActions[observedActions.Count - 1])
+                    // Add the action to the list of observed actions only if it is different from the previous action.
+                    if (observedActions.Count == 0 || predictedAction != observedActions[observedActions.Count - 1])
                     {
                         observedActions.Add(predictedAction);
                         if (observedActions.Contains("Relocate"))

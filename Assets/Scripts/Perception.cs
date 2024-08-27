@@ -4,20 +4,20 @@ using UnityEngine;
 
 internal class QSRLibrary
 {
-    // Dizionario che contiene, per ogni oggetto, un dizionario di tutte le QSR sin dall'inizio dell'attività
+    // Dictionary containing, for each object, a dictionary of all QSRs from the beginning of the activity
     private Dictionary<string, Dictionary<string, string>> library = new Dictionary<string, Dictionary<string, string>>();
 
     /// <summary>
-    /// Costruttore vuoto
+    /// Empty builder
     /// </summary>
     public QSRLibrary() { }
 
-	/// <summary>
-	/// // Aggiunge uno stato QSR all'oggetto specificato nella libreria
-	/// </summary>
-	/// <param name="objectName">Il nome dell'oggetto</param>
-	/// <param name="qsrState">I qsr relativi all'oggetto</param>
-	public void AddQSRState(string objectName, Dictionary<string, string> qsrState)
+    /// <summary>
+    /// Adds a QSR state to the specified object in the library
+    /// </summary>
+    /// <param name="objectName">The name of the object</param>
+    /// <param name="qsrState">The qsr related to the object</param>
+    public void AddQSRState(string objectName, Dictionary<string, string> qsrState)
     {
         if (!library.ContainsKey(objectName))
         {
@@ -30,12 +30,12 @@ internal class QSRLibrary
         }
     }
 
-	/// <summary>
-	/// Restituisce tutte le QSR associate a un oggetto dall'inizio dell'attività
-	/// </summary>
-	/// <param name="objectName">Nome dell'oggetto</param>
-	/// <returns>Restituisce un dizionario con tutti i qsr relativi all'oggetto. Restituisce un dizionario vuoto se l'oggetto non è presente</returns>
-	public Dictionary<string, string> GetAllQSRsForObject(string objectName)
+    /// <summary>
+    /// Returns all QSRs associated with an object since the start of the activity
+    /// </summary>
+    /// <param name="objectName">Object name</param>
+    /// <returns>Returns a dictionary with all qsr related to the object. Returns an empty dictionary if the object is not present</returns>
+    public Dictionary<string, string> GetAllQSRsForObject(string objectName)
     {
         if (library.ContainsKey(objectName))
         {
@@ -45,12 +45,12 @@ internal class QSRLibrary
         return new Dictionary<string, string>();
     }
 
-	/// <summary>
-	/// Restituisce l'ultima descrizione QSR associata a un oggetto presente nella libreria
-	/// </summary>
-	/// <param name="objectName">Nome dell'oggetto</param>
-	/// <returns>Restituisce un dizionario con gli ultimi qsr relativi all'oggetto. Restituisce un dizionario vuoto se l'oggetto non è presente</returns>
-	public Dictionary<string, string> GetLastQSRStateForObject(string objectName)
+    /// <summary>
+    /// Returns the last QSR description associated with an object in the library
+    /// </summary>
+    /// <param name="objectName">Object name</param>
+    /// <returns>Returns a dictionary with the last qsr related to the object. Returns an empty dictionary if the object is not present</returns>
+    public Dictionary<string, string> GetLastQSRStateForObject(string objectName)
     {
         if (library.ContainsKey(objectName))
         {
@@ -63,27 +63,27 @@ internal class QSRLibrary
 }
 
 /// <summary>
-/// Classe QSREngine all'interno del modulo Perception
+/// QSREngine class within the Perception module.
 /// </summary>
 internal class QSREngine
 {
     private Vector3 previousUserPosition;
 
-	/// <summary>
-	/// Costruttore della classe. Inizializza la posizione precedente con la posizione iniziale
-	/// </summary>
-	public QSREngine()
+    /// <summary>
+    /// Class constructor. Initializes the previous position with the initial position
+    /// </summary>
+    public QSREngine()
     {
         previousUserPosition = Vector3.zero;
     }
 
-	/// <summary>
-	/// Metodo per calcolare la distanza tra l'utente e l'oggetto (QDC)
-	/// </summary>
-	/// <param name="objectPosition">Posizione dell'oggetto</param>
-	/// <param name="userPosition">Posizione dell'utente</param>
-	/// <returns>Restituisce una stringa che indica la distanza tra l'utente e l'oggetto</returns>
-	public string CalculateQDC(Vector3 objectPosition, Vector3 userPosition)
+    /// <summary>
+    /// Method for calculating the distance between the user and the object (QDC)
+    /// </summary>
+    /// <param name="objectPosition">Location of the object</param>
+    /// <param name="userPosition">User position</param>
+    /// <returns>Returns a string indicating the distance between the user and the object</returns>
+    public string CalculateQDC(Vector3 objectPosition, Vector3 userPosition)
     {
         float distance = Vector3.Distance(objectPosition, userPosition);
 
@@ -99,14 +99,14 @@ internal class QSREngine
             return "Ignoring";
     }
 
-	/// <summary>
-	/// Metodo per calcolare la traiettoria dell'utente rispetto agli OOI considerando il prodotto tra vettori
-	/// </summary>
-	/// <param name="userStartPos">Posizione iniziale dell'utente</param>
-	/// <param name="userEndPos">Posizione finale dell'utente</param>
-	/// <param name="objectPos">Posizione dell'oggetto</param>
-	/// <returns>Una stringa che indica se l'utente si sta avvicinando o allontanando dall'oggetto</returns>
-	public string CalculateQTC(Transform user, Vector3 objectPos)
+    /// <summary>
+    /// Method to calculate the user's trajectory with respect to OOIs by considering the product between vectors
+    /// </summary>
+    /// <param name="userStartPos">Initial position of the user</param>
+    /// <param name="userEndPos">User's final position</param>
+    /// <param name="objectPos">Location of the object</param>
+    /// <returns>A string indicating whether the user is approaching or moving away from the object</returns>
+    public string CalculateQTC(Transform user, Vector3 objectPos)
     {
         Vector3 objectDirection = (objectPos - user.position).normalized;
         Vector3 userMovementDirection = (user.forward).normalized;
@@ -123,21 +123,21 @@ internal class QSREngine
     }
 
     /// <summary>
-    /// Calcola se l'utente è in movimento o stazionario.
+    /// It calculates whether the user is moving or stationary.
     /// </summary>
-    /// <param name="userEndPos">Ultima posizone dell'utente</param>
-    /// <returns>Una stringa che indica se l'utente è o meno in movimento</returns>
+    /// <param name="userEndPos">Latest user posture</param>
+    /// <returns>A string indicating whether or not the user is in motion</returns>
     public string CalculateMOS(Vector3 userEndPos)
     {
-        float velocityThreshold = 0.01f;  // Imposta la soglia di velocità
+        float velocityThreshold = 0.01f;  // Set the velocity threshold
 
-        // Calcola la velocità in base alla distanza tra la posizione corrente e precedente
+        // Calculates the velocity based on the distance between the current and previous position
         float velocity = Vector3.Distance(userEndPos, previousUserPosition);
 
-        // Aggiorna la posizione precedente
+        // Update previous position
         previousUserPosition = userEndPos;
 
-        // Verifica se la velocità supera la soglia
+        // Check whether the velocity exceeds the threshold
         if (velocity > velocityThreshold)
         {
             return "Moving";
@@ -149,9 +149,9 @@ internal class QSREngine
     }
 
     /// <summary>
-    /// Verifica se l'utente tiene in mano un oggetto o no. DA IMPLEMENTARE
+    /// Checks whether the user is holding an object or not.
     /// </summary>
-    /// <returns>Si o no</returns>
+    /// <returns>Yes or No</returns>
     public string CalculateHOLD(Vector3 objectPos, Vector3 handPos)
     {
         if(Vector3.Distance(objectPos, handPos) == 0)
@@ -166,7 +166,7 @@ internal class QSREngine
 }
 
 /// <summary>
-/// Classe principale Perception
+/// Main class Perception
 /// </summary>
 public class Perception : MonoBehaviour
 {
@@ -195,11 +195,11 @@ public class Perception : MonoBehaviour
         qsrEngineResults = new List<QSREngineResults>();
     }
 
-	/// <summary>
-	/// Avvia il calcolo delle QSRs
-	/// </summary>
-	/// <param name="worldState">Lo stato del mondo con le posizioni dell'utente e degli oggetti rilevati</param>
-	public void StartPerception(WorldState worldState, Transform user)
+    /// <summary>
+    /// Start the calculation of QSRs
+    /// </summary>
+    /// <param name="worldState">The state of the world with the positions of the user and detected objects</param>
+    public void StartPerception(WorldState worldState, Transform user)
     {
 		currentWorldState = worldState;
 
@@ -215,7 +215,7 @@ public class Perception : MonoBehaviour
             string qtcResult = currentQSR.CalculateQTC(user, objectPosition.Value);
             string holdResult = currentQSR.CalculateHOLD(objectPosition.Value, hand.position);
 
-            // Aggiornamento della libreria e visualizzazione nell'Inspector
+            // Library update and display in the Inspector
             objectQSRs.Add("QDC", qdcResult);
             if(mosResult == "Stationary")
             {
@@ -241,9 +241,9 @@ public class Perception : MonoBehaviour
     }
 
     /// <summary>
-    /// Ottiene gli utlimi risultati aggiunti alla libreria
+    /// Gets the latest results added to the library
     /// </summary>
-    /// <returns>QSRs associate a ogni oggetto</returns>
+    /// <returns>QSRs associated with each object</returns>
     public (Dictionary<string, Dictionary<string, string>>, Dictionary<string, Vector3>) GetLastResultsForObjects()
     {
         Dictionary<string, Dictionary<string, string>> qsrResults = new Dictionary<string, Dictionary<string, string>>();

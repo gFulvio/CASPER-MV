@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Casper : MonoBehaviour
 {
-    // Variabili per il rilevamento
-    [SerializeField] private Transform user;  // Riferimento al transform dell'utente
+    // Variables for OOIs detection
+    [SerializeField] private Transform user;  // Reference to user's transform
 
-    [SerializeField] private LayerMask objectLayer;  // Layer degli oggetti da rilevare
+    [SerializeField] private LayerMask objectLayer;  // Layer of objects to be detected
 
-    [SerializeField] private float detectionRange = 5f;  // Raggio di rilevamento dell'agente
+    [SerializeField] private float detectionRange = 5f;  // Agent detection radius
 
-    private WorldState currentWorldState; // Stato del mondo
+    private WorldState currentWorldState; // State of the world
 
     // Modules
     public Perception perception;
@@ -29,12 +29,12 @@ public class Casper : MonoBehaviour
 
     List<string> observations;
 
-    // Informazioni sugli oggetti rilevati
+    // Information about detected objects
     [System.Serializable]
     public class DetectedObjectInfo
     {
-        public string name;  // Nome dell'oggetto rilevato
-        public Vector3 position;  // Posizione dell'oggetto rilevato
+        public string name;  // Name of detected object
+        public Vector3 position;  // Location of the detected object
     }
     public List<DetectedObjectInfo> detectedObjectsInfo;
 
@@ -48,21 +48,21 @@ public class Casper : MonoBehaviour
 
 	private void Update()
     {
-        //Osservazione dell'user
+        // User observation
         transform.LookAt(new Vector3(user.position.x, transform.position.y, user.position.z));
 
-        // Rilevamento oggetti
+        // Object detection
         GetDetectedObjects();
 
-	    // Aggiornamento dello stato del mondo attuale
-		foreach (DetectedObjectInfo objectInfo in detectedObjectsInfo)
+        // Current world status update
+        foreach (DetectedObjectInfo objectInfo in detectedObjectsInfo)
 		{
 			currentWorldState.UpdateWorldState(user.position, objectInfo.name, objectInfo.position);
 		}
 
 		perception.StartPerception(currentWorldState, user);
-		// Prendi i risultati di perception e passali a LowLevel
-		var (qsrResults, objectPositions) = perception.GetLastResultsForObjects();
+        // Take perception results and pass them to LowLevel
+        var (qsrResults, objectPositions) = perception.GetLastResultsForObjects();
 		lowLevel.FocusEstimation(qsrResults, user, objectPositions);
         target.text = lowLevel.target;
 
@@ -74,9 +74,9 @@ public class Casper : MonoBehaviour
 
         if(lowLevel.observedActions.Count > 0 )
         {
-            highLevel.GoalR(lowLevel.observedActions);
+            highLevel.GoalReasoner(lowLevel.observedActions);
         }
-        //highLevel.GoalR(observations);
+        //highLevel.GoalReasoner(observations);
         predictedGoal.text = highLevel.predictedGoal;
 
         /*if(predictedGoal != null)

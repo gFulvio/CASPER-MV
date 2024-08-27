@@ -21,13 +21,13 @@ public class WorldState
 
     private void UpdateUserPositions(Vector3 newValue)
     {
-        // Se la chiave è "endPos" e il nuovo valore è uguale a quello attuale di "endPos", non fare nulla
+        // If the key is "endPos" and the new value is equal to the current value of "endPos," do nothing
         if (newValue == userPositions["endPos"])
         {
             return;
         }
 
-        // Altrimenti, aggiorna le posizioni
+        // Otherwise, update the positions
         userPositions["startPos"] = userPositions["endPos"];
         userPositions["endPos"] = newValue;
     }
@@ -36,11 +36,11 @@ public class WorldState
     {
         if (objectPositions.ContainsKey(key))
         {
-            objectPositions[key] = value; // Aggiorna il valore esistente
+            objectPositions[key] = value; // Update existing value
         }
         else
         {
-            objectPositions.Add(key, value); // Aggiunge una nuova coppia chiave-valore
+            objectPositions.Add(key, value); // Adds a new key-value pair
         }
     }
 }

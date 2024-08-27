@@ -49,6 +49,6 @@ public class Supervisor : MonoBehaviour
 
     public void ProcessDirector()
     {
-        //Da implementare;
+        // To be implemented;
     }
 }
