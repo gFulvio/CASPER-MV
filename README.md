@@ -1,5 +1,5 @@
 # CASPER-MV
- First Unity Native Cognitive Architecture for Virtual Agents based on CASPER (Cognitive Architecture for Social Perception and Engagement in Robots)
+ CASPER for Metaverse: first Unity native Cognitive Architecture for Virtual Agents inspired by CASPER (Cognitive Architecture for Social Perception and Engagement in Robots)
  
 To understand the original architecture please refer to 
 Vinanzi, S., & Cangelosi, A. (2024). CASPER: Cognitive Architecture for Social Perception and Engagement in Robots. International Journal of Social Robotics, 1-19.
@@ -7,6 +7,7 @@ You can also use the original architecture here, installing Webots, here: https:
 
 ## This version
 To better understand this version please refer also to "coming soon..."
+The architecture makes a virtual agent capable of performing Intention Reading on a human-controlled avatar from information gathered about the environment.
 
 ### Description
 The architecture is based on Qualitative Spatial Relations between the user and the objects of interest (OOI):
@@ -21,7 +22,7 @@ The architecture is composed of four modules:
 - High-Level: uses a sequence of actions to identify the user's goal;
 - Supervisor: sends all information to GPT-4 to advise the user (You need your own AZURE OPENAI API paid account credentials to use this or you can change it with an API of your choice (llama, openai, groq, ecc)!!!!);
 
-These modules correspond to four classes that you will find in the Scripts folder. Information is passed from one module to another through the CASPER Script in the GameObject Agent. 
+These modules correspond to four scripts that you will find in the Scripts folder and attached to the Agent game object. Information is passed from one module to another through the CASPER script attached to the Agent. 
 
 ### Test scene
 The test scene is set in a kitchen. The Agent can recognize one of the following user goals:
@@ -30,8 +31,10 @@ Lunck (take food from the refrigerator, put it in the microwave, take it to the 
 Drink (take the bottle, drink from the glass, take the glass to wash);
 Use the GameObject Capsule with the MoveTo script to move automatically (press L to perform the Lunch task, B for Breakfast, and D for Drink).
 
+There is present but disabled, a Capsule game object that corresponds to an avatar controllable by keyboard arrows. Feel free to program it as you like to make it pick up objects or sit at the table. You can also create your avatar from scratch or use the ThirdPerson Starter Asset from the Unity Asset Store. In any case, always remember to add it to the user field of the game object Agent so that it can be detected. 
+
 ### Object detection
-Object detection is done through an Overlap Sphere in the CASPER class. You are free to use another method such as raycasting.
+Object detection is done through an Overlap Sphere (https://docs.unity3d.com/ScriptReference/Physics.OverlapSphere.html) in the CASPER class. The LayerMask is set to OOI so an object needs to be on the OOI layer to be detected. You are free to use another method such as raycasting.
 
 ### Perception Class
 Vector operations are used to calculate QSRs in a QSREngine object. The results are stored as dictionaries through a QSRLibrary object.
