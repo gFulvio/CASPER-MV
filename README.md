@@ -1,12 +1,12 @@
 # CASPER-MV
  First Unity Native Cognitive Architecture for Virtual Agents based on CASPER (Cognitive Architecture for Social Perception and Engagement in Robots)
-
-Architecture modules are in the Scripts folder. 
-To better understand modules please refer to 
+ 
+To understand the original architecture please refer to 
 Vinanzi, S., & Cangelosi, A. (2024). CASPER: Cognitive Architecture for Social Perception and Engagement in Robots. International Journal of Social Robotics, 1-19.
 You can also use the original architecture here, installing Webots, here: https://github.com/samvinanzi/CASPER
 
 ## This version
+To better understand this version please refer also to "coming soon..."
 
 ### Description
 The architecture is based on Qualitative Spatial Relations between the user and the objects of interest (OOI):
