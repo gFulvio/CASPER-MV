@@ -14,7 +14,7 @@ The architecture is based on Qualitative Spatial Relations between the user and 
 - Qualitative Distance Calculus (QDC): Far, medium, near, touch;
 - Qualitative Trajectory Calculus (QTC): approaching or leaving;
 - Moving or Stationary (MOS);
-- Holding object or not (HOOLD);
+- Holding object or not (HOLD);
 
 The architecture is composed of four modules:
 - Perception: uses information about detected objects to calculate QSRs;
