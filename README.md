@@ -50,4 +50,4 @@ A particular algorithm (described in CASPER's paper) in the GoalReasoner method 
 
 ### Supervisor Class
 User and object positions, target, and goal are inserted as variables in a sentence describing the scene. The sentence is sent to a GPT-4 module through Azure OpenAI API. The initial prompt is in the inspector of the Agent GameObject in the Supervisor component. 
-You need your own paid account credentials to use the GPT-4 model, otherwise, you can use Groq's free API (https://github.com/Sarel-Esterhuizen/GroqSharp) to leverage a Llama model in the cloud. Then the model proposes a way to help the user in its task.
+You need your own paid account credentials to use the GPT-4 model, otherwise, you can use Groq's free API (https://github.com/Sarel-Esterhuizen/GroqSharp or https://www.nuget.org/packages/GroqNet/1.0.1) to leverage a Llama model in the cloud. Then the model proposes a way to help the user in its task.
