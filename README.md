@@ -20,7 +20,7 @@ The architecture is composed of four modules:
 - Perception: uses information about detected objects to calculate QSRs;
 - Low-Level: uses QSRs to identify a movement and a series of movements to identify the user's actions;
 - High-Level: uses a sequence of actions to identify the user's goal;
-- Supervisor: sends all information to GPT-4 to advise the user (you can change to your favorite API and model));
+- Supervisor: sends all information to GPT-4 to advise the user (you can change to your favorite API and LLM));
 
 These modules correspond to four scripts that you will find in the Scripts folder and attached to the Agent game object. Information is passed from one module to another through the CASPER script attached to the Agent. 
 
