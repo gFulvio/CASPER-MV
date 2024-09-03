@@ -79,10 +79,10 @@ public class Casper : MonoBehaviour
         //highLevel.GoalReasoner(observations);
         predictedGoal.text = highLevel.predictedGoal;
 
-        /*if(predictedGoal != null)
+        /*if(predictedGoal.text != "Unpredicted")
         {
-			supervisor.PlanGenerator(currentWorldState, target, predictedGoal);
-			supervisor.ProcessDirector();
+			supervisor.PlanGenerator(currentWorldState, target.text, predictedGoal.text);
+			//supervisor.ProcessDirector();
 		}*/
         
     }
